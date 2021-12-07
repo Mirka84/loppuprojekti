@@ -15,7 +15,7 @@ export default function Homescreen({ navigation }){
             <Button 
             buttonStyle={{ width: 150 }}
             containerStyle={{ margin: 100 }}
-            onPress={()=>navigation.navigate('Searchscreen')}
+            onPress={() => navigation.navigate('Find recipies')}
             title="Start finding your own recipes"
             />
         </View>
@@ -29,4 +29,4 @@ const styles = StyleSheet.create({
     backgroundColor: '#ecf0f1',
     padding: 8,
   }
-})
+}); 

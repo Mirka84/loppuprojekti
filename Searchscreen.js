@@ -5,41 +5,16 @@ import { Button } from 'react-native-elements';
 import { Image } from "react-native-elements";
 import { Card } from "react-native-elements";
 import { Icon } from "react-native-elements";
-import * as SQLite from 'expo-sqlite';
-
-const db = SQLite.openDatabase('coursedb.db');
 
 
-export default function Searchscreen(){
+
+export default function Searchscreen({ navigation }){
+
     const [text, setText]=useState(''); 
     const [repository, setRepository]=useState([]); 
-    const [list, setList]=useState([]); 
-    const [recipe, setRecipes]=useState(''); 
+    const [list, setList]=useState([]);  
+    const [recipe, setRecepies]=useState(''); 
 
-
-    useEffect(() => {
-      db.transaction(tx => {
-        tx.executeSql('create table if not exists recipies (id integer primary key not null, recipe text, notes text);');
-      });
-      updateList();    
-    }, []);
-  
-    // Save course
-    const saveItem = () => {
-      db.transaction(tx => {
-          tx.executeSql('insert into recipies (recipe) values (?);', [recipe]);    
-        }, null, updateList
-      )
-    
-    }
-    // Update courselist
-    const updateList = () => {
-      db.transaction(tx => {
-        tx.executeSql('select * from recipies;', [], (_, { rows }) =>
-          setList(rows._array)
-        ); 
-      });
-    }
   
   
     const getRepositories = () => {
@@ -53,6 +28,15 @@ export default function Searchscreen(){
             
         });    
       }
+
+      const saveItem = () => {
+        repository.map(recipe => {
+          return recipe=recipe.strMeal; 
+        } 
+        )}
+      
+
+
 
       const listSeparator = () => {
         return (
@@ -71,6 +55,7 @@ export default function Searchscreen(){
     return(
         <View>
             <Text>Tämä on etsintäsivu</Text>
+            <Button title="Show my recipies" onPress={() => navigation.navigate('Your recipebook', { recipe })}></Button>
             <Input
             placeholder="Search word"
             onChangeText={(text)=>setText(text)}
@@ -89,7 +74,7 @@ export default function Searchscreen(){
             <Card>
               <Image source={{uri: item.strMealThumb}} style={styles.images}></Image>
               <Text style={{fontSize: 18, fontWeight: "bold"}}>{item.strMeal}</Text>
-              <Button icon={<Icon name="save"/>} onPress={()=>setRecipes(item.strMeal), saveItem, console.log(item.strMeal)}>Save</Button>
+              <Button title="Save" icon={<Icon name="save" />} onPress={saveItem}></Button>
             </Card>
             </View>}
             data={repository} 
@@ -110,11 +95,9 @@ const styles = StyleSheet.create({
       height: 100,
     }, 
     button: {  
-      flexDirection: 'row',
       alignItems:'center',
       justifyContent: 'space-around',
-      width: 250,
     }
-   });
+   }); 
    
    

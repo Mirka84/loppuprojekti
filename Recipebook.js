@@ -1,28 +1,33 @@
 import React, {useState, useEffect} from 'react'; 
-import * as SQLite from 'expo-sqlite';
 import { View, FlatList, StyleSheet, Text } from  'react-native';
+import * as SQLite from 'expo-sqlite';
 
-const db = SQLite.openDatabase('recipedb.db');
+const db = SQLite.openDatabase('coursedb.db');
 
-export default function Recipebook(){
 
-    const [list, setList]=useState([]); 
+export default function Recipebook({ route, navigation }){
+
+    const { recipe }=route.params. 
+
+    const [list, setList]=useState([]);
 
     useEffect(() => {
-        db.transaction(tx => {
-          tx.executeSql('create table if not exists recipies (id integer primary key not null, name text, picture text, notes text);');
-        });
-        updateList();  
-        console.log(list)  
-      }, []);
+      db.transaction(tx => {
+        tx.executeSql('create table if not exists recipies (id integer primary key not null, recipe text);');
+      });
+      updateList();    
+    }, []);
   
-      const updateList = () => {
-        db.transaction(tx => {
-          tx.executeSql('select * from recipies;', [], (_, { rows }) =>
-            setList(rows._array)
-          ); 
-        });
-      }
+    
+    // Update recipelist
+    const updateList = () => {
+      db.transaction(tx => {
+        tx.executeSql('select * from recipies;', [], (_, { rows }) =>
+          setList(rows._array)
+        ); 
+      });
+    }
+
 
       const listSeparator = () => {
         return (
@@ -38,7 +43,7 @@ export default function Recipebook(){
       };
 
     return (
-        <View>
+      <View>
         <Text>Tämä on reseptisivu</Text>
         <FlatList 
             style={{marginLeft : "5%"}}
@@ -48,21 +53,13 @@ export default function Recipebook(){
             renderItem={({ item }) =>
                 <View>
                 <Card>
-                <Card.Title>{item.strMeal}</Card.Title>
-                    <Card.Divider/>
-                    <View style={{position:"relative",alignItems:"center"}}>
-                    <Image
-                    source={{uri: item.strMealThumb}} 
-                    style={styles.images}
-                    />
-                    <View style={styles.button}>
-                    <Button style={{width: 150}} icon={<Icon name="delete" color="red"/>} ></Button>
-                    </View>
-                    </View>
-                </Card>
-                </View> 
-                } 
-             /> 
+                  <Image source={{uri: item.strMealThumb}} style={styles.images}></Image>
+                  <Text style={{fontSize: 18, fontWeight: "bold"}}>{item.strMeal}</Text>
+                  <Button style={{width: 150}} icon={<Icon name="delete" color="red"/>} ></Button>
+                </Card> 
+                </View>
+                }
+              /> 
         </View>
     )
 }
@@ -78,9 +75,4 @@ const styles = StyleSheet.create({
       width: '50%',
       height: 100,
     }, 
-    button: {  
-      flexDirection: 'row',
-      alignItems:'center',
-      justifyContent: 'space-around',
-    }
-   });
+   }); 

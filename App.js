@@ -15,8 +15,8 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-      <Stack.Screen name="Welcome to your recipes!" component={Searchscreen} />
-      <Stack.Screen name="Find recipies" component={Homescreen} />
+      <Stack.Screen name="Welcome to your recipes!" component={Homescreen} />
+      <Stack.Screen name="Find recipies" component={Searchscreen} />
       <Stack.Screen name="Your recipebook" component={Recipebook} />
       </Stack.Navigator>
     </NavigationContainer>
