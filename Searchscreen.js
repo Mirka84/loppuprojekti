@@ -1,21 +1,16 @@
-import React, {useState, useEffect} from 'react'; 
-import { View, Text, FlatList, StyleSheet } from  'react-native';
+import React, { useState } from 'react'; 
+import { View, Text, FlatList, StyleSheet, ScrollView, Alert } from  'react-native';
 import { Input } from 'react-native-elements/dist/input/Input';
 import { Button } from 'react-native-elements'; 
 import { Image } from "react-native-elements";
 import { Card } from "react-native-elements";
-import { Icon } from "react-native-elements";
-
 
 
 export default function Searchscreen({ navigation }){
 
     const [text, setText]=useState(''); 
-    const [repository, setRepository]=useState([]); 
-    const [list, setList]=useState([]);  
-    const [recipe, setRecepies]=useState(''); 
+    const [repository, setRepository]=useState([]);   
 
-  
   
     const getRepositories = () => {
       
@@ -24,18 +19,8 @@ export default function Searchscreen({ navigation }){
         .then(responseData => setRepository(responseData.meals))
         .catch(error => { 
             Alert.alert('Error', error); 
-
-            
-        });    
+        }); 
       }
-
-      const saveItem = () => {
-        repository.map(recipe => {
-          return recipe=recipe.strMeal; 
-        } 
-        )}
-      
-
 
 
       const listSeparator = () => {
@@ -54,8 +39,8 @@ export default function Searchscreen({ navigation }){
     
     return(
         <View>
-            <Text>Tämä on etsintäsivu</Text>
-            <Button title="Show my recipies" onPress={() => navigation.navigate('Your recipebook', { recipe })}></Button>
+          
+            <Button title="Show my recipies" onPress={() => navigation.navigate('Your recipebook')}></Button>
             <Input
             placeholder="Search word"
             onChangeText={(text)=>setText(text)}
@@ -69,14 +54,20 @@ export default function Searchscreen({ navigation }){
             <FlatList 
             style={{marginLeft : "5%"}}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) =>
-            <View>
-            <Card>
-              <Image source={{uri: item.strMealThumb}} style={styles.images}></Image>
-              <Text style={{fontSize: 18, fontWeight: "bold"}}>{item.strMeal}</Text>
-              <Button title="Save" icon={<Icon name="save" />} onPress={saveItem}></Button>
-            </Card>
-            </View>}
+            renderItem={({ item }) => {
+              if(item !== null){
+                return(
+                  <ScrollView>
+                  <Card>
+                    <Image source={{uri: item.strMealThumb}} style={styles.images}></Image>
+                    <Text style={{fontSize: 18, fontWeight: "bold"}}>{item.strMeal}</Text>
+                  </Card>
+                  </ScrollView>)
+                  }
+                  else{
+                    Alert.alert('Sorry, no recipies found')
+                  }
+                }}
             data={repository} 
             ItemSeparatorComponent={listSeparator}
              /> 

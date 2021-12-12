@@ -6,17 +6,19 @@ import { Button } from "react-native-elements";
 export default function Homescreen({ navigation }){
     return(
         <View styles={styles.container}>
-            <Text>Tämä on koti</Text>
+           
+            <Button 
+            onPress={() => navigation.navigate('Your recipebook')}
+            title="Show my own recipies"
+            />
             <Image 
             source={{
                 uri:"https://live.staticflickr.com/3666/32720921904_bd81cb6158_b.jpg"}}
-            style={{ width: 300, height: 300, borderRadius: 150, padding: 10, margin: 30 }}
+            style={styles.Image}
             />
             <Button 
-            buttonStyle={{ width: 150 }}
-            containerStyle={{ margin: 100 }}
-            onPress={() => navigation.navigate('Find recipies')}
-            title="Start finding your own recipes"
+            onPress={() => navigation.navigate('Find New Ideas')}
+            title="Find new Ideas for recipies"
             />
         </View>
     )
@@ -28,5 +30,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#ecf0f1',
     padding: 8,
+  }, 
+    Image: {
+    width: 400,
+    height: 400,   
   }
 }); 
